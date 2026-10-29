@@ -39,3 +39,22 @@ func (b *Buffer) Values() []int {
 	}
 	return out
 }
+
+// Last returns the newest n values, oldest first. It returns all values
+// when n exceeds Len.
+func (b *Buffer) Last(n int) []int {
+	vals := b.Values()
+	if n > len(vals) {
+		n = len(vals)
+	}
+	return vals[len(vals)-n-1:]
+}
+
+// Sum returns the sum of the values in the buffer.
+func (b *Buffer) Sum() int {
+	var total int
+	for i := 0; i < len(b.vals); i++ {
+		total += b.vals[i]
+	}
+	return total
+}
