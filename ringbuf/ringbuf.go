@@ -39,3 +39,12 @@ func (b *Buffer) Values() []int {
 	}
 	return out
 }
+
+// Mean returns the average of the values in the buffer.
+func (b *Buffer) Mean() int {
+	var total int
+	for _, v := range b.Values() {
+		total += v
+	}
+	return total / b.Len()
+}
