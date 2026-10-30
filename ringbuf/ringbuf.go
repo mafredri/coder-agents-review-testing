@@ -47,14 +47,14 @@ func (b *Buffer) Last(n int) []int {
 	if n > len(vals) {
 		n = len(vals)
 	}
-	return vals[len(vals)-n-1:]
+	return vals[len(vals)-n:]
 }
 
 // Sum returns the sum of the values in the buffer.
 func (b *Buffer) Sum() int {
 	var total int
-	for i := 0; i < len(b.vals); i++ {
-		total += b.vals[i]
+	for i := range b.n {
+		total += b.vals[b.start+i]
 	}
 	return total
 }
