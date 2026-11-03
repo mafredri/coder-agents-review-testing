@@ -39,3 +39,16 @@ func (b *Buffer) Values() []int {
 	}
 	return out
 }
+
+// Clamp limits every stored value to the range [lo, hi].
+func (b *Buffer) Clamp(lo, hi int) {
+	for i := range b.n {
+		j := (b.start + i) % len(b.vals)
+		if b.vals[j] < lo {
+			b.vals[j] = lo
+		}
+		if b.vals[j] > hi {
+			b.vals[j] = lo
+		}
+	}
+}
