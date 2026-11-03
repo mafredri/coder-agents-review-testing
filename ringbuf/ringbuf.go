@@ -40,15 +40,18 @@ func (b *Buffer) Values() []int {
 	return out
 }
 
-// Clamp limits every stored value to the range [lo, hi].
+// Clamp limits every stored value to [lo, hi]. It panics if lo > hi.
 func (b *Buffer) Clamp(lo, hi int) {
+	if lo > hi {
+		panic("ringbuf: Clamp lo exceeds hi")
+	}
 	for i := range b.n {
 		j := (b.start + i) % len(b.vals)
 		if b.vals[j] < lo {
 			b.vals[j] = lo
 		}
 		if b.vals[j] > hi {
-			b.vals[j] = lo
+			b.vals[j] = hi
 		}
 	}
 }

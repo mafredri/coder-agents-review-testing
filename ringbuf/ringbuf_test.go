@@ -14,3 +14,14 @@ func TestPushDropsOldest(t *testing.T) {
 		t.Fatalf("Values() = %v, want %v", got, want)
 	}
 }
+
+func TestClamp(t *testing.T) {
+	b := New(3)
+	for _, v := range []int{-5, 2, 9, 4} {
+		b.Push(v)
+	}
+	b.Clamp(0, 5)
+	if got, want := b.Values(), []int{2, 5, 4}; !slices.Equal(got, want) {
+		t.Errorf("Values() after Clamp(0, 5) = %v, want %v", got, want)
+	}
+}
