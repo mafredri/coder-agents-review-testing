@@ -7,3 +7,5 @@ requests change the Go package in `ringbuf/`.
 
 `modes.json` is a copy of the file in coder-agents-review; the bot reads it
 from this repository when `MODES_REPO` points here.
+
+Status comment mockups: see the open pull request "Status comment mockups".
