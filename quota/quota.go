@@ -24,7 +24,14 @@ type bucket struct {
 }
 
 // New returns a Limiter that allows limit requests per key in each window.
+// It panics if limit or window is not positive.
 func New(limit int, window time.Duration) *Limiter {
+	if limit <= 0 {
+		panic("quota: limit must be positive")
+	}
+	if window <= 0 {
+		panic("quota: window must be positive")
+	}
 	return &Limiter{
 		limit:  limit,
 		window: window,
@@ -44,7 +51,7 @@ func (l *Limiter) Allow(key string) bool {
 		b = &bucket{Start: now}
 		l.counts[key] = b
 	}
-	if b.N > l.limit {
+	if b.N >= l.limit {
 		return false
 	}
 	b.N++

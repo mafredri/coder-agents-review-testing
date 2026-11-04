@@ -22,6 +22,44 @@ func TestAllowFirstRequests(t *testing.T) {
 	}
 }
 
+func TestAllowDeniesOverLimit(t *testing.T) {
+	l, _ := newTestLimiter(3, time.Minute)
+	allowed := 0
+	for range 10 {
+		if l.Allow("a") {
+			allowed++
+		}
+	}
+	if allowed != 3 {
+		t.Fatalf("allowed %d of 10 requests, want 3", allowed)
+	}
+	if got := l.Remaining("a"); got != 0 {
+		t.Fatalf("Remaining after the limit = %d, want 0", got)
+	}
+}
+
+func TestNewPanicsOnNonPositive(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		limit  int
+		window time.Duration
+	}{
+		{"zero limit", 0, time.Minute},
+		{"negative limit", -1, time.Minute},
+		{"zero window", 1, 0},
+		{"negative window", 1, -time.Minute},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			defer func() {
+				if recover() == nil {
+					t.Fatal("New did not panic")
+				}
+			}()
+			New(tc.limit, tc.window)
+		})
+	}
+}
+
 func TestAllowNewWindow(t *testing.T) {
 	l, now := newTestLimiter(1, time.Minute)
 	l.Allow("a")
