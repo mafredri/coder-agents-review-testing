@@ -60,3 +60,16 @@ func TestDump(t *testing.T) {
 		t.Fatalf("Dump = %q, want %q", got, want)
 	}
 }
+
+func TestNewPanicsOnNonPositive(t *testing.T) {
+	for _, capacity := range []int{0, -1} {
+		func() {
+			defer func() {
+				if recover() == nil {
+					t.Errorf("New(%d) did not panic", capacity)
+				}
+			}()
+			New(capacity)
+		}()
+	}
+}

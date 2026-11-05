@@ -25,8 +25,12 @@ type entry struct {
 	val string
 }
 
-// New returns an empty Cache that holds at most capacity entries.
+// New returns an empty Cache that holds at most capacity entries. It panics
+// if capacity is not positive.
 func New(capacity int) *Cache {
+	if capacity <= 0 {
+		panic("lru: capacity must be positive")
+	}
 	return &Cache{
 		cap:   capacity,
 		ll:    list.New(),
